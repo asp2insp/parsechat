@@ -26,7 +26,17 @@ class ChatViewController: UIViewController {
     
 
     @IBAction func sendMessage(sender: AnyObject) {
-        
+        var messageObj = PFObject(className: "Message")
+        messageObj["text"] = messageText.text
+        messageObj["user"] = PFUser.currentUser()
+        messageObj.saveInBackgroundWithBlock { (success, error) -> Void in
+            if success {
+                NSLog("Saved Message")
+                self.messageText.text = ""
+            } else {
+                NSLog("Message Failed: \(error?.localizedDescription)")
+            }
+        }
     }
     
 }
